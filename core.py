@@ -97,8 +97,8 @@ class Animation(object):
         del self._fig
         del self._ax
 
-    def add_point(self, x, y, **kwargs):
-        self._objects.append(Point(self._ax, x, y, **kwargs))
+    def add(self, objType, *args, **kwargs):
+        self._objects.append(objType(self._ax, *args, **kwargs))
 
     def _reset(self):
         for obj in self._objects:

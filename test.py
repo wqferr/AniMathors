@@ -1,18 +1,21 @@
 import numpy as np
-from core import Animation
+from core import Animation, Point
 
 def init(anim):
-    anim.add_point(
+    anim.add(
+        Point,
         0, np.sin(0),
         color='b', size=10,
         path=lambda t,dt: (0, np.cos(t))
     )
-    anim.add_point(
+    anim.add(
+        Point,
         np.cos(0), 0,
         color='g', size=10,
         path=lambda t,dt: (-np.sin(t), 0)
     )
-    anim.add_point(
+    anim.add(
+        Point,
         1, 0,
         color='y', size=5,
         path=lambda t,dt: (-np.sin(t), 2*np.cos(2*t))
