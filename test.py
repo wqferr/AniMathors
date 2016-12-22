@@ -1,12 +1,13 @@
 import numpy as np
-from core import Animation, Point
+from core.anim import Animation
+from core.obj import Point, Line
 
 def init(anim):
     anim.add(
         Point,
         0, np.sin(0),
         color='b', size=10,
-        path=lambda t,dt: (0, np.cos(t))
+        path=lambda t,dt: (0, 3*np.cos(3*t))
     )
     anim.add(
         Point,
@@ -17,8 +18,18 @@ def init(anim):
     anim.add(
         Point,
         1, 0,
-        color='y', size=5,
-        path=lambda t,dt: (-np.sin(t), 2*np.cos(2*t))
+        color='w', size=5,
+        path=lambda t,dt: (-np.sin(t), 3*np.cos(3*t))
+    )
+    anim.add(
+        Line,
+        -.5, 0,
+        .5, 0,
+        color='r',
+        path = lambda t,dt: (
+            (np.sin(t)/2, -np.cos(t)/2),
+            (-np.sin(t)/2, np.cos(t)/2)
+        )
     )
 
 if __name__ == '__main__':
