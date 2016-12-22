@@ -2,7 +2,6 @@ import numpy
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
-
 origin = numpy.array([0, 0])
 
 class Point(object):
@@ -10,7 +9,7 @@ class Point(object):
         self._path_func = kwargs.get('path', lambda t,dt: origin)
         self._prevMov = origin
 
-        dot, = ax.plot([x], [y], 'o')
+        dot, = ax.plot([float(x)], [float(y)], 'o')
         dot.set_markeredgewidth(0)
         self._dot = dot
 
@@ -74,6 +73,7 @@ class Point(object):
     @size.setter
     def size(self, r):
         self._dot.set_markersize(r)
+
 
 class Animation(object):
 
