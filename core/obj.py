@@ -21,12 +21,8 @@ class Point(object):
             return self._dot.__getattribute__(attr)
 
     def update(self, t, dt):
-        mov = self._path_func(t, dt)
-        x, y = self._dot.get_data()
-        self._dot.set_data(
-            x + dt*mov[0],
-            y + dt*mov[1]
-        )
+        x, y = self._path_func(t, dt)
+        self._dot.set_data(x, y)
 
     @property
     def pos(self):
@@ -86,12 +82,10 @@ class Line(object):
             return self._seg.__getattribute__(attr)
 
     def update(self, t, dt):
-        mov = self._path_func(t, dt)
-        x1, x2 = self._seg.get_xdata()
-        y1, y2 = self._seg.get_ydata()
+        (x1, y1), (x2, y2) = self._path_func(t, dt)
         self._seg.set_data(
-            [x1 + dt*mov[0][0], x2 + dt*mov[1][0]],
-            [y1 + dt*mov[0][1], y2 + dt*mov[1][1]]
+            [x1, x2],
+            [y1, y2]
         )
 
     @property
