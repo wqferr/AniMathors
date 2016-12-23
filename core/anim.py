@@ -10,7 +10,8 @@ class Animation(object):
 
         self._ax.set_xlim(*kwargs.get('xlim', (-1, 1)))
         self._ax.set_ylim(*kwargs.get('ylim', (-1, 1)))
-        self._fig.set_size_inches(10, 10, forward=True)
+        self._fig.set_size_inches(8, 8, forward=True)
+        plt.subplots_adjust(left=0.0, right=1.0, bottom=0.0, top=1.0)
         self._ax.axis('off')
 
         self._dt = kwargs.get('dt', 0.01)
