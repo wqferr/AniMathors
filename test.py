@@ -2,34 +2,41 @@ import numpy as np
 from core.anim import Animation
 from core.obj import Point, Line
 
+def update_p1(p1, t):
+    p1.x = np.cos(t)
+
+def update_p2(p2, t):
+    p2.y = np.sin(3*t)
+
+def update_p3(p3, t):
+    p3.pos = (p1.x, p2.y)
+
+def update_line(l, t):
+    l.pos1 = (np.cos(t)/2, np.sin(t)/2)
+    l.pos2 = (-np.cos(t)/2, -np.sin(t)/2)
+
+p1, p2 = None, None
 def init(anim):
-    anim.add(
+    global p1, p2
+    p1 = anim.add(
         Point,
-        0, np.sin(0),
-        color='b', size=10,
-        path=lambda t,dt: (0, np.sin(3*t))
-    )
-    anim.add(
-        Point,
-        np.cos(0), 0,
         color='g', size=10,
-        path=lambda t,dt: (np.cos(t), 0)
+        update=update_p1
+    )
+    p2 = anim.add(
+        Point,
+        color='b', size=10,
+        update=update_p2
     )
     anim.add(
         Point,
-        1, 0,
         color='w', size=5,
-        path=lambda t,dt: (np.cos(t), np.sin(3*t))
+        update=update_p3
     )
     anim.add(
         Line,
-        -.5, 0,
-        .5, 0,
         color='r',
-        path = lambda t,dt: (
-            (np.cos(t), np.sin(t)),
-            (-np.cos(t), -np.sin(t))
-        )
+        update=update_line
     )
 
 if __name__ == '__main__':

@@ -1,8 +1,11 @@
 origin = (0, 0)
 
 class Point(object):
-    def __init__(self, ax, x, y, **kwargs):
-        self._path_func = kwargs.get('path', lambda t,dt: origin)
+    def __init__(self, ax, x=None, y=None, **kwargs):
+        self._update_func = kwargs.get('update', lambda p,t: None)
+
+        if None in [x, y]:
+            x, y = 0, 0
 
         dot, = ax.plot([float(x)], [float(y)], 'o')
         dot.set_markeredgewidth(0)
@@ -20,9 +23,8 @@ class Point(object):
         except AttributeError:
             return self._dot.__getattribute__(attr)
 
-    def update(self, t, dt):
-        x, y = self._path_func(t, dt)
-        self._dot.set_data(x, y)
+    def update(self, t):
+        self._update_func(self, t)
 
     @property
     def pos(self):
@@ -67,8 +69,11 @@ class Point(object):
 
 
 class Line(object):
-    def __init__(self, ax, x1, y1, x2, y2, **kwargs):
-        self._path_func = kwargs.get('path', lambda t,dt: (origin, origin))
+    def __init__(self, ax, x1=None, y1=None, x2=None, y2=None, **kwargs):
+        self._update_func = kwargs.get('update', lambda l,t: None)
+        if None in [x1, y1, x2, y2]:
+            x1, y1, x2, y2 = 0, 0, 0, 0
+
         self._seg, = ax.plot([float(x1), float(x2)], [float(y1), float(y2)], '-')
         self.color = kwargs.get('color', '0')
 
@@ -81,12 +86,8 @@ class Line(object):
         except AttributeError:
             return self._seg.__getattribute__(attr)
 
-    def update(self, t, dt):
-        (x1, y1), (x2, y2) = self._path_func(t, dt)
-        self._seg.set_data(
-            [x1, x2],
-            [y1, y2]
-        )
+    def update(self, t):
+        self._update_func(self, t)
 
     @property
     def color(self):
@@ -97,12 +98,28 @@ class Line(object):
         self._seg.set_color(c)
 
     @property
+    def pos1(self):
+        return self.x1, self.y1
+
+    @pos1.setter
+    def pos1(self, p):
+        self.x1, self.y1 = p
+
+    @property
+    def pos2(self):
+        return self.x2, self.y2
+
+    @pos2.setter
+    def pos2(self, p):
+        self.x2, self.y2 = p
+
+    @property
     def x1(self):
         return self._seg.get_xdata()[0]
 
     @x1.setter
     def x1(self, x):
-        self._seg.set_xdata(x, self.x2)
+        self._seg.set_xdata([x, self.x2])
 
     @property
     def x2(self):
@@ -110,7 +127,7 @@ class Line(object):
 
     @x2.setter
     def x2(self, x):
-        self._seg.set_xdata(self.x1, x)
+        self._seg.set_xdata([self.x1, x])
 
     @property
     def y1(self):
@@ -118,7 +135,7 @@ class Line(object):
 
     @y1.setter
     def y1(self, y):
-        self._seg.set_ydata(y, self.y2)
+        self._seg.set_ydata([y, self.y2])
 
     @property
     def y2(self):
@@ -126,4 +143,4 @@ class Line(object):
 
     @y2.setter
     def y2(self, y):
-        self._seg.set_ydata(self.y1, y)
+        self._seg.set_ydata([self.y1, y])

@@ -27,6 +27,7 @@ class Animation(object):
 
     def add(self, objType, *args, **kwargs):
         self._objects.append(objType(self._ax, *args, **kwargs))
+        return self._objects[-1]
 
     def _reset(self):
         for obj in self._objects:
@@ -41,7 +42,7 @@ class Animation(object):
     def _run(self, t):
         t *= self._dt
         for obj in self._objects:
-            obj.update(t, self._dt)
+            obj.update(t)
         return self._objects
 
     def play(self, **kwargs):
