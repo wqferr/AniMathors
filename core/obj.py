@@ -4,7 +4,7 @@ origin = (0, 0)
 
 class Point(object):
     def __init__(self, ax, x=None, y=None, **kwargs):
-        self._update_func = kwargs.get('update', lambda p,t: None)
+        self._update_func = kwargs.get('update', lambda p,t,dt: None)
 
         if None in [x, y]:
             x, y = 0, 0
@@ -25,8 +25,8 @@ class Point(object):
         except AttributeError:
             return self._dot.__getattribute__(attr)
 
-    def update(self, t):
-        self._update_func(self, t)
+    def update(self, t, dt):
+        self._update_func(self, t, dt)
 
     @property
     def pos(self):
@@ -73,7 +73,7 @@ class Point(object):
 
 class Line(object):
     def __init__(self, ax, x1=None, y1=None, x2=None, y2=None, **kwargs):
-        self._update_func = kwargs.get('update', lambda l,t: None)
+        self._update_func = kwargs.get('update', lambda l,t,dt: None)
         if None in [x1, y1, x2, y2]:
             x1, y1, x2, y2 = 0, 0, 0, 0
 
@@ -89,8 +89,8 @@ class Line(object):
         except AttributeError:
             return self._seg.__getattribute__(attr)
 
-    def update(self, t):
-        self._update_func(self, t)
+    def update(self, t, dt):
+        self._update_func(self, t, dt)
 
     @property
     def color(self):

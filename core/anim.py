@@ -42,7 +42,7 @@ class Animation(object):
     def _run(self, t):
         t *= self._dt
         for obj in self._objects:
-            obj.update(t)
+            obj.update(t, self._dt)
         return self._objects
 
     def play(self, **kwargs):

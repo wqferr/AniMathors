@@ -3,19 +3,19 @@ import colorsys
 from core.anim import Animation
 from core.obj import Point, Line
 
-def update_p1(p1, t):
+def update_p1(p1, t, dt):
     p1.x = np.cos(t)
 
-def update_p2(p2, t):
+def update_p2(p2, t, dt):
     p2.y = np.sin(3*t)
 
-def update_p3(p3, t):
+def update_p3(p3, t, dt):
     p3.pos = (p1.x, p2.y)
     c = colorsys.rgb_to_hsv(*p3.color)
-    c = ((c[0]+0.01) % 1, c[1], c[2])
+    c = ((c[0]+dt/(2*np.pi)) % 1, c[1], c[2])
     p3.color = colorsys.hsv_to_rgb(*c)
 
-def update_line(l, t):
+def update_line(l, t, dt):
     l.pos1 = (np.cos(t)/2, np.sin(t)/2)
     l.pos2 = (-np.cos(t)/2, -np.sin(t)/2)
 
@@ -43,5 +43,5 @@ def init(anim):
     )
 
 if __name__ == '__main__':
-    anim = Animation(dt=0.001*np.pi, init_func=init)
+    anim = Animation(dt=0.005*np.pi, init_func=init)
     anim.play(interval=100/6, frames=2000)
