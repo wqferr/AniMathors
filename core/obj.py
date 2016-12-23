@@ -1,3 +1,5 @@
+from matplotlib.colors import colorConverter as cc
+
 origin = (0, 0)
 
 class Point(object):
@@ -56,6 +58,7 @@ class Point(object):
 
     @color.setter
     def color(self, c):
+        c = cc.to_rgb(c)
         self._dot.set_markerfacecolor(c)
         self._dot.set_markerfacecoloralt(c)
 
@@ -95,6 +98,7 @@ class Line(object):
 
     @color.setter
     def color(self, c):
+        c = cc.to_rgb(c)
         self._seg.set_color(c)
 
     @property

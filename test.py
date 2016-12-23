@@ -1,4 +1,5 @@
 import numpy as np
+import colorsys
 from core.anim import Animation
 from core.obj import Point, Line
 
@@ -10,12 +11,14 @@ def update_p2(p2, t):
 
 def update_p3(p3, t):
     p3.pos = (p1.x, p2.y)
+    c = colorsys.rgb_to_hsv(*p3.color)
+    c = ((c[0]+0.01) % 1, c[1], c[2])
+    p3.color = colorsys.hsv_to_rgb(*c)
 
 def update_line(l, t):
     l.pos1 = (np.cos(t)/2, np.sin(t)/2)
     l.pos2 = (-np.cos(t)/2, -np.sin(t)/2)
 
-p1, p2 = None, None
 def init(anim):
     global p1, p2
     p1 = anim.add(
@@ -30,7 +33,7 @@ def init(anim):
     )
     anim.add(
         Point,
-        color='w', size=5,
+        color='r', size=7,
         update=update_p3
     )
     anim.add(
@@ -40,5 +43,5 @@ def init(anim):
     )
 
 if __name__ == '__main__':
-    anim = Animation(dt=0.01*np.pi, init_func=init)
-    anim.play(interval=100/6, frames=200)
+    anim = Animation(dt=0.001*np.pi, init_func=init)
+    anim.play(interval=100/6, frames=2000)
