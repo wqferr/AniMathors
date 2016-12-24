@@ -1,4 +1,5 @@
 from matplotlib.colors import colorConverter as cc
+from numpy import sqrt, arctan2, pi, sin, cos
 
 origin = (0, 0)
 
@@ -148,3 +149,69 @@ class Line(object):
     @y2.setter
     def y2(self, y):
         self._seg.set_ydata([self.y1, y])
+
+class Vector(object):
+    def __init__(self, ax, x, y, dx=None, dy=None, **kwargs):
+        self._update_func = kwargs.get('update', lambda v,t,dt: None)
+        if None in [dx, dy]:
+            dx, dy = x, y
+            x, y = 0, 0
+
+        self.norm2 = dx**2 + dy**2
+        self.norm = sqrt(self.norm2)
+
+        if 'head_angle' not in kwargs:
+            kwargs['head_angle'] = pi/6
+        if 'head_length' not in kwargs:
+            kwargs['head_length'] = self.norm / 5
+
+        self._arrow = []
+        xh, yh = x+dx, y+dy
+        angle = arctan2(dy, dx)
+        self._arrow.append(Line(ax, x, y, xh, yh, **kwargs))
+        self._arrow.append(Line(
+            ax,
+            xh, yh,
+            *self._head_shaft_pos(xh, yh, angle, kwargs, 1),
+            **kwargs
+        ))
+        self._arrow.append(Line(
+            ax,
+            xh, yh,
+            *self._head_shaft_pos(xh, yh, angle, kwargs, -1),
+            **kwargs
+        ))
+
+        self.color = kwargs.get('color', 'w')
+
+    def __del__(self):
+        for obj in self._arrow:
+            del obj
+
+    def __getattribute__(self, attr):
+        try:
+            return object.__getattribute__(self, attr)
+        except AttributeError:
+            return self._arrow[0].__getattribute__(attr)
+
+    def _head_shaft_pos(self, xh, yh, angle, kwargs, direction):
+        angleh = kwargs['head_angle']
+        lenh = kwargs['head_length']
+        a = angleh
+        b = angle - pi
+
+        t = a*direction + b
+        return xh+cos(t)*lenh, yh+sin(t)*lenh
+
+    def update(self, t, dt):
+        self._update_func(self, t, dt)
+
+    @property
+    def color(self):
+        return self._arrow[0].get_color()
+
+    @color.setter
+    def color(self, c):
+        c = cc.to_rgb(c)
+        for obj in self._arrow:
+            obj.set_color(c)

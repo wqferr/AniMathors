@@ -1,7 +1,7 @@
 import numpy as np
 import colorsys
 from core.anim import Animation
-from core.obj import Point, Line
+from core.obj import Point, Line, Vector
 
 def update_p1(p1, t, dt):
     p1.x = np.cos(t)
@@ -40,6 +40,14 @@ def init(anim):
         Line,
         color='r',
         update=update_line
+    )
+    v = anim.add(
+        Vector,
+        -.05, -.25
+    )
+    v2 = anim.add(
+        Vector,
+        .05, -.2
     )
 
 if __name__ == '__main__':
