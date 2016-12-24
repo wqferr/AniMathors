@@ -51,8 +51,8 @@ class Animation(object):
 
     def play(self, **kwargs):
         kwargs['init_func'] = self._init
-        kwargs['interval'] = self._dt
-        kwargs['frames'] = int((self._tmax-self._tmin) / self._dt)
-        kwargs['repeat'] = kwargs.get('repeat', self._repeat)
+        kwargs.setdefault('interval', self._dt)
+        kwargs.setdefault('frames', int((self._tmax-self._tmin) / self._dt))
+        kwargs.setdefault('repeat', self._repeat)
         self._anim = anim.FuncAnimation(self._fig, self._run, **kwargs)
         plt.show()
