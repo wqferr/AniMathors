@@ -58,5 +58,4 @@ def init(anim):
     )
 
 if __name__ == '__main__':
-    anim = Animation(dt=0.005*np.pi, init_func=init)
-    anim.play(interval=100/6, frames=2000)
+    Animation(dt=0.01, tmax=2*np.pi, init_func=init).play()

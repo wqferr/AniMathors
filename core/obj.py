@@ -15,9 +15,6 @@ class Point(object):
         self.color = kwargs.get('color', '0')
         self.size = kwargs.get('size', 10)
 
-    def __del__(self):
-        del self._dot
-
     def __getattribute__(self, attr):
         try:
             return object.__getattribute__(self, attr)
@@ -79,9 +76,6 @@ class Line(object):
         self._seg, = ax.plot([float(x1), float(x2)], [float(y1), float(y2)], '-')
         self.color = kwargs.get('color', '0')
         self.lw = kwargs.get('lw', 2)
-
-    def __del__(self):
-        del self._seg
 
     def __getattribute__(self, attr):
         try:
@@ -190,15 +184,15 @@ class Vector(object):
 
         self.color = kwargs.get('color', 'w')
 
-    def __del__(self):
-        for obj in self._arrow:
-            del obj
-
     def __getattribute__(self, attr):
         try:
             return object.__getattribute__(self, attr)
         except AttributeError:
             return self._arrow[0].__getattribute__(attr)
+
+    def remove(self):
+        for obj in self._arrow:
+            obj.remove()
 
     def _update_arrow_head(self):
         self._arrow[1].p1 = self._arrow[0].p2
