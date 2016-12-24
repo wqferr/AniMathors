@@ -1,6 +1,6 @@
 import numpy as np
 import colorsys
-from numpy import sin, cos
+from numpy import sin, cos, tan
 from core.anim import Animation
 from core.obj import Point, Line, Vector, Curve
 
@@ -31,12 +31,23 @@ def update_v(v, t, dt):
 def update_c(c, t, dt):
     c.update_params(
         tmin=min(v.hx, p3.x),
-        tmax=max(v.hx, p3.x),
-        dt=max(abs(p3.y)/5, 0.001)
+        tmax=max(v.hx, p3.x)
     )
 
+def update_seg1(s, t, dt):
+    s.p1 = c.p1
+    s.p2 = (c.p1[0], 0)
+
+def update_seg2(s, t, dt):
+    s.p1 = c.p2
+    s.p2 = (c.p2[0], 0)
+
+def update_seg3(s, t, dt):
+    s.p1 = seg1.p2
+    s.p2 = seg2.p2
+
 def init(anim):
-    global p1, p2, p3, v
+    global p1, p2, p3, v, c, seg1, seg2
     p1 = anim.add(
         Point,
         0, 0,
@@ -69,11 +80,33 @@ def init(anim):
     )
     c = anim.add(
         Curve,
-        lambda t: t**3,
+        lambda t: sin(2*np.pi*t),
         -1, 1,
         color='w',
         update=update_c
     )
+    seg1 = anim.add(
+        Line,
+        0, 0, 0, 0,
+        color='w',
+        lw=1,
+        update=update_seg1
+    )
+    seg2 = anim.add(
+        Line,
+        0, 0, 0, 0,
+        color='w',
+        lw=1,
+        update=update_seg2
+    )
+    anim.add(
+        Line,
+        0, 0, 0, 0,
+        color='w',
+        lw=1,
+        update=update_seg3
+    )
+
 
 if __name__ == '__main__':
     Animation(dt=0.01, tmax=6*np.pi, init_func=init, repeat=True).play()

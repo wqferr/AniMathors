@@ -282,6 +282,22 @@ class Vector(object):
         self._arrow[0].y2 = v
         self._update_arrow_head()
 
+    @property
+    def head(self):
+        return self.hx, self.hy
+
+    @head.setter
+    def head(self, p):
+        self.hx, self.hy = p
+
+    @property
+    def tail(self):
+        return self.x, self.y
+
+    @tail.setter
+    def tail(self, p):
+        self.x, self.y = p
+
 class Curve(object):
     def __init__(self, ax, f, tmin=0, tmax=1, dt=0.01, **kwargs):
         self._update_func = kwargs.get('update', lambda c,t,dt: None)
@@ -307,6 +323,30 @@ class Curve(object):
     def color(self, c):
         c = cc.to_rgb(c)
         self._line.set_color(c)
+
+    def update(self, t, dt):
+        self._update_func(self, t, dt)
+
+    def update_params(self, **kwargs):
+        if 'tmin' in kwargs:
+            self._tmin = kwargs['tmin']
+        if 'tmax' in kwargs:
+            self._tmax = kwargs['tmax']
+        if 'dt' in kwargs:
+            self._dt = kwargs['dt']
+
+        self._update_line()
+
+    def _update_line(self):
+        T, F = [], []
+        t = self.tmin
+        while t < self.tmax:
+            T.append(t)
+            F.append(self.f(t))
+            t += self.dt
+
+        self._line.set_xdata(T)
+        self._line.set_ydata(F)
 
     @property
     def f(self):
@@ -351,27 +391,3 @@ class Curve(object):
     @property
     def p2(self):
         return self._line.get_xdata()[-1], self._line.get_ydata()[-1]
-
-    def update(self, t, dt):
-        self._update_func(self, t, dt)
-
-    def update_params(self, **kwargs):
-        if 'tmin' in kwargs:
-            self._tmin = kwargs['tmin']
-        if 'tmax' in kwargs:
-            self._tmax = kwargs['tmax']
-        if 'dt' in kwargs:
-            self._dt = kwargs['dt']
-
-        self._update_line()
-
-    def _update_line(self):
-        T, F = [], []
-        t = self.tmin
-        while t < self.tmax:
-            T.append(t)
-            F.append(self.f(t))
-            t += self.dt
-
-        self._line.set_xdata(T)
-        self._line.set_ydata(F)
