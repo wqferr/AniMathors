@@ -19,6 +19,10 @@ def update_line(l, t, dt):
     l.pos1 = (np.cos(t)/2, np.sin(t)/2)
     l.pos2 = (-np.cos(t)/2, -np.sin(t)/2)
 
+def update_v(v, t, dt):
+    v.hx += dt/2
+    v.hy -= dt/3
+
 def init(anim):
     global p1, p2
     p1 = anim.add(
@@ -43,7 +47,8 @@ def init(anim):
     )
     v = anim.add(
         Vector,
-        -.05, -.25
+        -.05, -.25,
+        update=update_v
     )
     v2 = anim.add(
         Vector,
