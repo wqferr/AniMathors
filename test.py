@@ -1,5 +1,6 @@
 import numpy as np
 import colorsys
+from numpy import sin, cos
 from core.anim import Animation
 from core.obj import Point, Line, Vector
 
@@ -20,8 +21,12 @@ def update_line(l, t, dt):
     l.pos2 = (-np.cos(t)/2, -np.sin(t)/2)
 
 def update_v(v, t, dt):
-    v.hx += dt/2
-    v.hy -= dt/3
+    r2 = np.sqrt(2)/4
+    c = r2 * cos(2*t)
+    s = r2/3 * sin(2*t)
+
+    v.hx = c - s
+    v.hy = c + s
 
 def init(anim):
     global p1, p2
@@ -49,10 +54,6 @@ def init(anim):
         Vector,
         -.05, -.25,
         update=update_v
-    )
-    v2 = anim.add(
-        Vector,
-        .05, -.2
     )
 
 if __name__ == '__main__':
