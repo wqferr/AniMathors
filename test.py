@@ -53,6 +53,7 @@ def init(anim):
     v = anim.add(
         Vector,
         -.05, -.25,
+        color='b',
         update=update_v
     )
 

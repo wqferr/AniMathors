@@ -78,6 +78,7 @@ class Line(object):
 
         self._seg, = ax.plot([float(x1), float(x2)], [float(y1), float(y2)], '-')
         self.color = kwargs.get('color', '0')
+        self.lw = kwargs.get('lw', 2)
 
     def __del__(self):
         del self._seg
@@ -99,6 +100,14 @@ class Line(object):
     def color(self, c):
         c = cc.to_rgb(c)
         self._seg.set_color(c)
+
+    @property
+    def lw(self):
+        return self._seg.get_linewidth()
+
+    @lw.setter
+    def lw(self, w):
+        self._seg.set_linewidth(w)
 
     @property
     def p1(self):
@@ -217,6 +226,15 @@ class Vector(object):
         c = cc.to_rgb(c)
         for obj in self._arrow:
             obj.set_color(c)
+
+    @property
+    def lw(self):
+        return self._arrow[0].lw
+
+    @lw.setter
+    def lw(self, w):
+        for obj in self._arrow:
+            obj.lw = w
 
     @property
     def x(self):
