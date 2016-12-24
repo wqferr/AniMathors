@@ -327,7 +327,7 @@ class Curve(object):
     def update(self, t, dt):
         self._update_func(self, t, dt)
 
-    def update_params(self, **kwargs):
+    def set_params(self, **kwargs):
         if 'tmin' in kwargs:
             self._tmin = kwargs['tmin']
         if 'tmax' in kwargs:
@@ -338,15 +338,16 @@ class Curve(object):
         self._update_line()
 
     def _update_line(self):
-        T, F = [], []
+        X, Y = [], []
         t = self.tmin
         while t < self.tmax:
-            T.append(t)
-            F.append(self.f(t))
+            x, y = self.f(t)
+            X.append(x)
+            Y.append(y)
             t += self.dt
 
-        self._line.set_xdata(T)
-        self._line.set_ydata(F)
+        self._line.set_xdata(X)
+        self._line.set_ydata(Y)
 
     @property
     def f(self):

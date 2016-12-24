@@ -29,7 +29,7 @@ def update_v(v, t, dt):
     v.hy = c + s
 
 def update_c(c, t, dt):
-    c.update_params(
+    c.set_params(
         tmin=min(v.hx, p3.x),
         tmax=max(v.hx, p3.x)
     )
@@ -45,6 +45,15 @@ def update_seg2(s, t, dt):
 def update_seg3(s, t, dt):
     s.p1 = seg1.p2
     s.p2 = seg2.p2
+
+def update_circumf(c, t, dt):
+    c.set_params(
+        tmin=c.tmin+dt,
+        tmax=c.tmax+dt
+    )
+    col = colorsys.rgb_to_hsv(*c.color)
+    col = ((col[0]+dt/(2*np.pi)) % 1, col[1], col[2])
+    c.color = colorsys.hsv_to_rgb(*col)
 
 def init(anim):
     global p1, p2, p3, v, c, seg1, seg2
@@ -80,7 +89,7 @@ def init(anim):
     )
     c = anim.add(
         Curve,
-        lambda t: sin(2*np.pi*t),
+        lambda t: (t, sin(np.pi*t)),
         -1, 1,
         color='w',
         update=update_c
@@ -105,6 +114,13 @@ def init(anim):
         color='w',
         lw=1,
         update=update_seg3
+    )
+    anim.add(
+        Curve,
+        lambda t: (cos(t), sin(t)),
+        0, np.pi/3,
+        color='g',
+        update=update_circumf
     )
 
 
