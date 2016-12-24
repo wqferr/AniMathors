@@ -1,18 +1,16 @@
+import numpy as np
 from matplotlib.colors import colorConverter as cc
 from numpy import sqrt, arctan2, pi, sin, cos
 
 class Point(object):
-    def __init__(self, ax, x=None, y=None, **kwargs):
+    def __init__(self, ax, x, y, **kwargs):
         self._update_func = kwargs.get('update', lambda p,t,dt: None)
-
-        if None in [x, y]:
-            x, y = 0, 0
 
         dot, = ax.plot([float(x)], [float(y)], 'o')
         dot.set_markeredgewidth(0)
         self._dot = dot
 
-        self.color = kwargs.get('color', '0')
+        self.color = kwargs.get('color', 'w')
         self.size = kwargs.get('size', 10)
 
     def __getattribute__(self, attr):
@@ -68,13 +66,11 @@ class Point(object):
 
 
 class Line(object):
-    def __init__(self, ax, x1=None, y1=None, x2=None, y2=None, **kwargs):
+    def __init__(self, ax, x1, y1, x2, y2, **kwargs):
         self._update_func = kwargs.get('update', lambda l,t,dt: None)
-        if None in [x1, y1, x2, y2]:
-            x1, y1, x2, y2 = 0, 0, 0, 0
 
         self._seg, = ax.plot([float(x1), float(x2)], [float(y1), float(y2)], '-')
-        self.color = kwargs.get('color', '0')
+        self.color = kwargs.get('color', 'w')
         self.lw = kwargs.get('lw', 2)
 
     def __getattribute__(self, attr):
@@ -285,3 +281,97 @@ class Vector(object):
     def hy(self, v):
         self._arrow[0].y2 = v
         self._update_arrow_head()
+
+class Curve(object):
+    def __init__(self, ax, f, tmin=0, tmax=1, dt=0.01, **kwargs):
+        self._update_func = kwargs.get('update', lambda c,t,dt: None)
+        self._f = f
+        self._tmin = tmin
+        self._tmax = tmax
+        self._dt = dt
+        self._line, = ax.plot([], [])
+        self._update_line()
+        self.color = kwargs.get('color', 'w')
+
+    def __getattribute__(self, attr):
+        try:
+            return object.__getattribute__(self, attr)
+        except AttributeError:
+            return self._line.__getattribute__(attr)
+
+    @property
+    def color(self):
+        return self._line.get_color()
+
+    @color.setter
+    def color(self, c):
+        c = cc.to_rgb(c)
+        self._line.set_color(c)
+
+    @property
+    def f(self):
+        return self._f
+
+    @f.setter
+    def f(self, func):
+        self._f = func
+        self._update_line()
+
+    @property
+    def tmin(self):
+        return self._tmin
+
+    @tmin.setter
+    def tmin(self, t):
+        self._tmin = t
+        self._update_line()
+
+    @property
+    def tmax(self):
+        return self._tmax
+
+    @tmax.setter
+    def tmax(self, t):
+        self._tmax = t
+        self._update_line()
+
+    @property
+    def dt(self):
+        return self._dt
+
+    @dt.setter
+    def dt(self, d):
+        self._dt = d
+        self._update_func()
+
+    @property
+    def p1(self):
+        return self._line.get_xdata()[0], self._line.get_ydata()[0]
+
+    @property
+    def p2(self):
+        return self._line.get_xdata()[-1], self._line.get_ydata()[-1]
+
+    def update(self, t, dt):
+        self._update_func(self, t, dt)
+
+    def update_params(self, **kwargs):
+        if 'tmin' in kwargs:
+            self._tmin = kwargs['tmin']
+        if 'tmax' in kwargs:
+            self._tmax = kwargs['tmax']
+        if 'dt' in kwargs:
+            self._dt = kwargs['dt']
+
+        self._update_line()
+
+    def _update_line(self):
+        T, F = [], []
+        t = self.tmin
+        while t < self.tmax:
+            T.append(t)
+            F.append(self.f(t))
+            t += self.dt
+
+        self._line.set_xdata(T)
+        self._line.set_ydata(F)
