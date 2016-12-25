@@ -1,10 +1,10 @@
 import numpy as np
+import core.softening as s
 from numpy import sin, cos
 from core.anim import Animation
 from core.obj import Vector, Line
-from core.softening import sigmoid
 
-sHandSpeed = 24
+sHandSpeed = 12
 mHandSpeed = sHandSpeed/60
 hHandSpeed = mHandSpeed/12
 
@@ -26,11 +26,10 @@ def update_h(v, t, dt):
 
 def init(anim):
     anim.add(
-        Line,
-        0, 0, 0, 1/2,
-        color='r',
-        lw=1,
-        update=update_s
+        Vector,
+        0, 1/5,
+        color='.50',
+        update=update_h
     )
     anim.add(
         Vector,
@@ -39,17 +38,18 @@ def init(anim):
         update=update_m
     )
     anim.add(
-        Vector,
-        0, 1/5,
-        color='.50',
-        update=update_h
+        Line,
+        0, 0, 0, 1/2,
+        color='r',
+        lw=1,
+        update=update_s
     )
 
 if __name__ == '__main__':
     Animation(
         dt=0.001,
-        tmin=0, tmax=60/sHandSpeed,
+        tmin=0, tmax=1/mHandSpeed,
         init_func=init,
         repeat=False,
-        softener=sigmoid(6)
+        softener=s.smoothstep
     ).play()
