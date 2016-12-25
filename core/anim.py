@@ -17,7 +17,9 @@ class Animation(object):
         self._dt = kwargs.get('dt', 0.01)
         self._tmin = kwargs.get('tmin', 0)
         self._tmax = kwargs.get('tmax', 1)
+        self._len = self._tmax - self._tmin
         self._repeat = kwargs.get('repeat', False)
+        self._softener = kwargs.get('softener', lambda t: t)
 
         self._init_func = kwargs.get('init_func', lambda: None)
 
@@ -44,7 +46,8 @@ class Animation(object):
         return self._objects
 
     def _run(self, t):
-        t *= self._dt
+        t = self._dt * t
+        t = self._softener(t / self._len) * self._len
         for obj in self._objects:
             obj.update(t, self._dt)
         return self._objects
