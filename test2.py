@@ -1,5 +1,5 @@
 import numpy as np
-import core.softening as s
+import core.soft as s
 from numpy import sin, cos
 from core.anim import Animation
 from core.obj import Vector, Line
@@ -25,7 +25,7 @@ def update_h(v, t, dt):
     v.head = (cos(t)/5, sin(t)/5)
 
 def init(anim):
-    anim.add(
+    h = anim.add(
         Vector,
         0, 1/5,
         color='.50',

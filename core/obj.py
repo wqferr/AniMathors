@@ -19,8 +19,16 @@ class Point(object):
         except AttributeError:
             return self._dot.__getattribute__(attr)
 
-    def update(self, t, dt):
+    def anim_update(self, t, dt):
         self._update_func(self, t, dt)
+
+    @property
+    def update(self):
+        return self._update_func
+
+    @update.setter
+    def update(self, f):
+        self._update_func = f
 
     @property
     def pos(self):
@@ -79,8 +87,16 @@ class Line(object):
         except AttributeError:
             return self._seg.__getattribute__(attr)
 
-    def update(self, t, dt):
+    def anim_update(self, t, dt):
         self._update_func(self, t, dt)
+
+    @property
+    def update(self):
+        return self._update_func
+
+    @update.setter
+    def update(self, f):
+        self._update_func = f
 
     @property
     def color(self):
@@ -204,8 +220,16 @@ class Vector(object):
         t = a*direction + b
         return self.hx+cos(t)*self.head_length, self.hy+sin(t)*self.head_length
 
-    def update(self, t, dt):
+    def anim_update(self, t, dt):
         self._update_func(self, t, dt)
+
+    @property
+    def update(self):
+        return self._update_func
+
+    @update.setter
+    def update(self, f):
+        self._update_func = f
 
     @property
     def color(self):
@@ -324,8 +348,16 @@ class Curve(object):
         c = cc.to_rgb(c)
         self._line.set_color(c)
 
-    def update(self, t, dt):
+    def anim_update(self, t, dt):
         self._update_func(self, t, dt)
+
+    @property
+    def update(self):
+        return self._update_func
+
+    @update.setter
+    def update(self, f):
+        self._update_func = f
 
     def set_params(self, **kwargs):
         if 'tmin' in kwargs:

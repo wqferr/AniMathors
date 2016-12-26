@@ -30,20 +30,17 @@ def sinexp(a):
         return 1 - np.sin(np.pi/2 * np.exp(-a*t*t) * (1-t)*(1-t))
     return f
 
-def bezier3(p):
-    """ Creates the Beziér curve (0, p, 1) """
-    def f(t):
-        return 2*(1-t)*t*p + t*t
-    return f
+def _bez(points):
+    if len(points) == 1:
+        p = points[0]
+        return lambda t: p
 
-def bezier4(p1, p2):
-    """ Creates the Beziér curve (0, p1, p2, 1) """
-    def f(t):
-        t = _clamp(0, 1, t)
-        tc2 = (1-t)*(1-t)
-        return 3*tc2*t*p1 + 3*(1-t)*t*t*p2 + t*t*t
+    b0 = _bez(points[0:-1])
+    b1 = _bez(points[1:])
+    return lambda t: (1-t)*b0(t) + t*b1(t)
 
-    return f
+def bezier(points):
+    return _bez([0] + points + [1])
 
 def ease_in(f):
     return bezier3(1/10**f)
