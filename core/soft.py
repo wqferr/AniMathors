@@ -31,13 +31,16 @@ def sinexp(a):
     return f
 
 def _bez(points):
-    if len(points) == 1:
-        p = points[0]
-        return lambda t: p
+    points = list(points) # preserve original list
+    n = len(points)
+    def f(t):
+        p = list(points)
+        for k in range(1, n):
+            for i in range(n-k):
+                p[i] = (1-t)*p[i] + t*p[i+1]
+        return p[0]
 
-    b0 = _bez(points[0:-1])
-    b1 = _bez(points[1:])
-    return lambda t: (1-t)*b0(t) + t*b1(t)
+    return f
 
 def bezier(points):
     return _bez([0] + points + [1])

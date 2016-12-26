@@ -3,7 +3,7 @@ from core.anim import Animation
 from core.obj import Curve
 from core.soft import bezier, smoothstep
 
-bx = bezier([1, 1, 0, .5, 0])
+bx = bezier([1, 1, 0, .5, 0, 0, 0, 0, 0, 0])
 by = bezier([.2, 0, 0, 0])
 
 def update_c(c, t, dt):
