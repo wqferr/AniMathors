@@ -1,4 +1,4 @@
-import numpy
+from math import ceil
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
@@ -14,17 +14,16 @@ class Animation(object):
         plt.subplots_adjust(left=0.0, right=1.0, bottom=0.0, top=1.0)
         self._ax.axis('off')
 
-        self._dt = kwargs.get('dt', 0.01)
-        self._tmin = kwargs.get('tmin', 0)
-        self._tmax = kwargs.get('tmax', 1)
-        self._len = self._tmax - self._tmin
+        self._dt = float(kwargs.get('dt', 0.01))
+        self._speed = float(kwargs.get('speed', 1))
+        self._len = kwargs.get('length', 1)
         self._repeat = kwargs.get('repeat', False)
         self._softener = kwargs.get('softener', lambda t: t)
 
         self._init_func = kwargs.get('init_func', lambda: None)
 
-        self._anim = None
         self._objects = []
+        self._anim = None
 
     def __del__(self):
         self._reset()
@@ -46,7 +45,7 @@ class Animation(object):
         return self._objects
 
     def _run(self, t):
-        t = self._dt * t
+        t = self._dt * t * self._speed
         t = self._softener(t / self._len) * self._len
         for obj in self._objects:
             obj.anim_update(t, self._dt)
@@ -54,8 +53,8 @@ class Animation(object):
 
     def play(self, **kwargs):
         kwargs['init_func'] = self._init
-        kwargs.setdefault('interval', self._dt)
-        kwargs.setdefault('frames', int((self._tmax-self._tmin) / self._dt))
+        kwargs.setdefault('interval', self._dt/self._speed)
+        kwargs['frames'] = ceil((self._len/self._dt) / self._speed)
         kwargs.setdefault('repeat', self._repeat)
         self._anim = anim.FuncAnimation(self._fig, self._run, **kwargs)
         plt.show()

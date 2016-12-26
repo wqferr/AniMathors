@@ -30,7 +30,7 @@ def sinexp(a):
         return 1 - np.sin(np.pi/2 * np.exp(-a*t*t) * (1-t)*(1-t))
     return f
 
-def _bez(points):
+def bezier(points):
     points = list(points) # preserve original list
     n = len(points)
     def f(t):
@@ -42,8 +42,11 @@ def _bez(points):
 
     return f
 
-def bezier(points):
-    return _bez([0] + points + [1])
+def bezier_s(order):
+    return bezier([0]*order + [1]*order)
+
+def bezier_z(order):
+    return bezier([1]*order + [0]*order)
 
 def ease_in(f):
     return bezier3(1/10**f)

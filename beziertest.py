@@ -1,10 +1,7 @@
-
 from core.anim import Animation
 from core.obj import Curve
-from core.soft import bezier, smoothstep
-
-bx = bezier([1, 1, 0, .5, 0, 0, 0, 0, 0, 0])
-by = bezier([.2, 0, 0, 0])
+from core.soft import bezier_s, bezier_z, smoothstep, sigmoid
+from core.util import to_r2
 
 def update_c(c, t, dt):
     c.tmax = t
@@ -12,17 +9,23 @@ def update_c(c, t, dt):
 def init(anim):
     anim.add(
         Curve,
-        lambda t: (bx(t), by(t)),
+        to_r2(bezier_s(3)),
         0, 0,
-        color='w',
+        update=update_c
+    )
+    anim.add(
+        Curve,
+        to_r2(bezier_z(3)),
+        0, 0,
         update=update_c
     )
 
 if __name__ == '__main__':
     anim = Animation(
-        xlim=(0, 1), ylim=(0, 1),
+        dt=.01, length=1,
+        speed=1/2,
+        xlim=(-2, 2), ylim=(-2, 2),
         init_func=init,
-        softener=smoothstep,
-        repeat=False
+        softener=smoothstep
     )
     anim.play()
