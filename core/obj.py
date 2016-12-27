@@ -377,6 +377,14 @@ class Curve(object):
             X.append(x)
             Y.append(y)
             t += self.dt
+            if t == self.tmax:
+                break
+        else:
+            # tmax isn't reached exactly by increments of dt, so we must add
+            # the last point by force
+            x, y = self.f(self.tmax)
+            X.append(x)
+            Y.append(y)
 
         self._line.set_xdata(X)
         self._line.set_ydata(Y)

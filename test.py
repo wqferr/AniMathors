@@ -4,23 +4,23 @@ from numpy import sin, cos, tan
 from core.anim import Animation
 from core.obj import Point, Line, Vector, Curve
 
-def update_p1(p1, t, dt):
+def update_p1(p1, t, tmax):
     p1.x = np.cos(t)
 
-def update_p2(p2, t, dt):
+def update_p2(p2, t, tmax):
     p2.y = np.sin(t/3)
 
-def update_p3(p3, t, dt):
+def update_p3(p3, t, tmax):
     p3.pos = (p1.x, p2.y)
     c = colorsys.rgb_to_hsv(*p3.color)
     c = ((c[0]+dt/(2*np.pi)) % 1, c[1], c[2])
     p3.color = colorsys.hsv_to_rgb(*c)
 
-def update_line(l, t, dt):
+def update_line(l, t, tmax):
     l.p1 = (np.cos(t)/2, np.sin(t)/2)
     l.p2 = (-np.cos(t)/2, -np.sin(t)/2)
 
-def update_v(v, t, dt):
+def update_v(v, t, tmax):
     r2 = np.sqrt(2)/4
     c = r2 * cos(2*t)
     s = r2/3 * sin(2*t)
@@ -28,25 +28,25 @@ def update_v(v, t, dt):
     v.hx = s - c
     v.hy = c + s
 
-def update_c(c, t, dt):
+def update_c(c, t, tmax):
     c.set_params(
         tmin=min(v.hx, p3.x),
         tmax=max(v.hx, p3.x)
     )
 
-def update_seg1(s, t, dt):
+def update_seg1(s, t, tmax):
     s.p1 = c.p1
     s.p2 = (c.p1[0], 0)
 
-def update_seg2(s, t, dt):
+def update_seg2(s, t, tmax):
     s.p1 = c.p2
     s.p2 = (c.p2[0], 0)
 
-def update_seg3(s, t, dt):
+def update_seg3(s, t, tmax):
     s.p1 = seg1.p2
     s.p2 = seg2.p2
 
-def update_circumf(c, t, dt):
+def update_circumf(c, t, tmax):
     c.set_params(
         tmin=c.tmin+dt,
         tmax=c.tmax+dt
