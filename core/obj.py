@@ -19,8 +19,8 @@ class Point(object):
         except AttributeError:
             return self._dot.__getattribute__(attr)
 
-    def anim_update(self, t, dt):
-        self._update_func(self, t, dt)
+    def anim_update(self, t, tmax):
+        self._update_func(self, t, tmax)
 
     @property
     def update(self):
@@ -87,8 +87,8 @@ class Line(object):
         except AttributeError:
             return self._seg.__getattribute__(attr)
 
-    def anim_update(self, t, dt):
-        self._update_func(self, t, dt)
+    def anim_update(self, t, tmax):
+        self._update_func(self, t, tmax)
 
     @property
     def update(self):
@@ -220,8 +220,8 @@ class Vector(object):
         t = a*direction + b
         return self.hx+cos(t)*self.head_length, self.hy+sin(t)*self.head_length
 
-    def anim_update(self, t, dt):
-        self._update_func(self, t, dt)
+    def anim_update(self, t, tmax):
+        self._update_func(self, t, tmax)
 
     @property
     def update(self):
@@ -348,8 +348,8 @@ class Curve(object):
         c = cc.to_rgb(c)
         self._line.set_color(c)
 
-    def anim_update(self, t, dt):
-        self._update_func(self, t, dt)
+    def anim_update(self, t, tmax):
+        self._update_func(self, t, tmax)
 
     @property
     def update(self):

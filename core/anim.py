@@ -48,7 +48,7 @@ class Animation(object):
         t = self._dt * t * self._speed
         t = self._softener(t / self._len) * self._len
         for obj in self._objects:
-            obj.anim_update(t, self._dt)
+            obj.anim_update(t, self._len)
         return self._objects
 
     def play(self, **kwargs):
