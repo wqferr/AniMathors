@@ -13,7 +13,7 @@ def update_p2(p2, t, tmax):
 def update_p3(p3, t, tmax):
     p3.pos = (p1.x, p2.y)
     c = colorsys.rgb_to_hsv(*p3.color)
-    c = ((c[0]+dt/(2*np.pi)) % 1, c[1], c[2])
+    c = ((c[0]+anim.dt/(2*np.pi)) % 1, c[1], c[2])
     p3.color = colorsys.hsv_to_rgb(*c)
 
 def update_line(l, t, tmax):
@@ -48,11 +48,11 @@ def update_seg3(s, t, tmax):
 
 def update_circumf(c, t, tmax):
     c.set_params(
-        tmin=c.tmin+dt,
-        tmax=c.tmax+dt
+        tmin=c.tmin+anim.dt,
+        tmax=c.tmax+anim.dt
     )
     col = colorsys.rgb_to_hsv(*c.color)
-    col = ((col[0]+dt/(2*np.pi)) % 1, col[1], col[2])
+    col = ((col[0]+anim.dt/(2*np.pi)) % 1, col[1], col[2])
     c.color = colorsys.hsv_to_rgb(*col)
 
 def init(anim):
@@ -125,4 +125,6 @@ def init(anim):
 
 
 if __name__ == '__main__':
-    Animation(dt=0.01, tmax=6*np.pi, init_func=init, repeat=True).play()
+    global anim
+    anim = Animation(dt=0.01, length=6*np.pi, init_func=init, repeat=True)
+    anim.play()
