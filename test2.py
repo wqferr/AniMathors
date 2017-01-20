@@ -29,26 +29,26 @@ def update_c(c, t, tmax):
     c.tmax = t/tmax
 
 def init(anim):
-    h = anim.add(
+    h = anim.create(
         Vector,
         0, 1/5,
         color='.50',
         update=update_h
     )
-    anim.add(
+    anim.create(
         Vector,
         0, 1/3,
         color='w',
         update=update_m
     )
-    anim.add(
+    anim.create(
         Line,
         0, 0, 0, 1/2,
         color='r',
         lw=1,
         update=update_s
     )
-    anim.add(
+    anim.create(
         Curve,
         lambda t: (2*t-1, 2*b(t)-1),
         color='g',

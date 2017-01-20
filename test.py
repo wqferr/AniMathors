@@ -57,65 +57,65 @@ def update_circumf(c, t, tmax):
 
 def init(anim):
     global p1, p2, p3, v, c, seg1, seg2
-    p1 = anim.add(
+    p1 = anim.create(
         Point,
         0, 0,
         color='g', size=10,
         update=update_p1
     )
-    p2 = anim.add(
+    p2 = anim.create(
         Point,
         0, 0,
         color='b', size=10,
         update=update_p2
     )
-    p3 = anim.add(
+    p3 = anim.create(
         Point,
         0, 0,
         color='r', size=7,
         update=update_p3
     )
-    anim.add(
+    anim.create(
         Line,
         0, 0, 0, 0,
         color='r',
         update=update_line
     )
-    v = anim.add(
+    v = anim.create(
         Vector,
         -.05, -.25,
         color='b',
         update=update_v
     )
-    c = anim.add(
+    c = anim.create(
         Curve,
         lambda t: (t, sin(np.pi*t)),
         -1, 1,
         color='w',
         update=update_c
     )
-    seg1 = anim.add(
+    seg1 = anim.create(
         Line,
         0, 0, 0, 0,
         color='w',
         lw=1,
         update=update_seg1
     )
-    seg2 = anim.add(
+    seg2 = anim.create(
         Line,
         0, 0, 0, 0,
         color='w',
         lw=1,
         update=update_seg2
     )
-    anim.add(
+    anim.create(
         Line,
         0, 0, 0, 0,
         color='w',
         lw=1,
         update=update_seg3
     )
-    anim.add(
+    anim.create(
         Curve,
         lambda t: (cos(t), sin(t)),
         0, np.pi/3,

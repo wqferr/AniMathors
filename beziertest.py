@@ -12,25 +12,25 @@ def init(anim):
         B.append(bezier_s(i+1))
 
     for b in B:
-        anim.add(
+        anim.create(
             Curve,
             lambda t, b=b: (t, b(t)),
             0, 0,
             update=update_c
         )
-        anim.add(
+        anim.create(
             Curve,
             lambda t, b=b: (b(t), t),
             0, 0,
             update=update_c
         )
-        anim.add(
+        anim.create(
             Curve,
             lambda t, b=b: (t, b(1-t)),
             0, 0,
             update=update_c
         )
-        anim.add(
+        anim.create(
             Curve,
             lambda t, b=b: (b(t), 1-t),
             0, 0,

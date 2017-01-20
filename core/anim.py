@@ -30,8 +30,12 @@ class Animation(object):
         del self._fig
         del self._ax
 
-    def add(self, objType, *args, **kwargs):
+    def create(self, objType, *args, **kwargs):
         obj = objType(self._ax, *args, **kwargs)
+        self._objects.append(obj)
+        return obj
+
+    def add(self, obj):
         self._objects.append(obj)
         return obj
 
