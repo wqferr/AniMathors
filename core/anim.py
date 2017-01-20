@@ -64,4 +64,7 @@ class Animation(object):
         self._anim = anim.FuncAnimation(self._fig, self._run, **kwargs)
         plt.show()
 
+    @property
+    def dt(self):
+        return self._dt
 
