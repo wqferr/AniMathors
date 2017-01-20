@@ -31,8 +31,9 @@ class Animation(object):
         del self._ax
 
     def add(self, objType, *args, **kwargs):
-        self._objects.append(objType(self._ax, *args, **kwargs))
-        return self._objects[-1]
+        obj = objType(self._ax, *args, **kwargs)
+        self._objects.append(obj)
+        return obj
 
     def _reset(self):
         for obj in self._objects:
@@ -58,3 +59,5 @@ class Animation(object):
         kwargs.setdefault('repeat', self._repeat)
         self._anim = anim.FuncAnimation(self._fig, self._run, **kwargs)
         plt.show()
+
+
