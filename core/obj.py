@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib.colors import colorConverter as cc
+from matplotlib.patches import Polygon as MplPol
 from numpy import sqrt, arctan2, pi, sin, cos
 
 class Point(object):
@@ -432,3 +433,23 @@ class Curve(object):
     @property
     def p2(self):
         return self._line.get_xdata()[-1], self._line.get_ydata()[-1]
+
+class Polygon(object):
+
+    def __init__(self, ax, xy, **kwargs):
+        self._pol = MplPol(xy, kwargs)
+        ax.add_patch(self._pol)
+
+    @property
+    def xy(self):
+        return self._pol.get_xy()
+
+    @xy.setter
+    def xy(self, xy):
+        self._pol.set_xy(xy)
+
+    def remove(self):
+        self._pol.remove()
+
+    def anim_update(self, *args):
+        pass

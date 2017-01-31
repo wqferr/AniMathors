@@ -1,6 +1,7 @@
 import numpy as np
 import colorsys
 from numpy import sin, cos, tan
+import core
 from core.anim import Animation
 from core.obj import Point, Line, Vector, Curve
 
